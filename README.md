@@ -1,20 +1,26 @@
 # Pattern-Matcher
 
-Das Projekt implementiert einen Pattern-Matcher zur Suche von Schlüsselwörtern in einer Textdatei. Die Funktionalität basiert auf einem endlichen Automaten, der die Schlüsselwörter präfixkomprimiert speichert. Der Automat wird so modifiziert, dass er die Textdatei zeilenweise verarbeitet und die gefundenen Schlüsselwörter je Zeile, der Reihe nach ausgibt.
+The Project implements a Pattern-Matcher to search for keywords in text data. The implementation relies on a finite state machine that saves the keywords prefx compressed. The finite state machine is modified in a way that dass text data is processed line by line and the keywords that were found are displayed.
 
 
 
-# Literatur
+# Literature
+The implementation relies on Aho & Corasick (1975): (https://cr.yp.to/bib/1975/aho.pdf)
 
-Die Implementierung beruht auf Aho & Corasick (1975): (https://cr.yp.to/bib/1975/aho.pdf)
+# Requirements (Ubuntu)
 
-# Voraussetzungen (Ubuntu)
-
-* C++-Compiler, z.B. [g++](https://gcc.gnu.org/) 
+* C++-Compiler, e.g. [g++](https://gcc.gnu.org/) 
 * [Doxypress](https://www.copperspice.com/docs/doxypress/index.html) für die Dokumentation
 
 
-# Aufruf
+# Remarks
+
+The project was made 
+The project was developed as part of a course at the University of Potsdam as an examination.
+The project should only work with elements of C++ covered in the course,
+hence, no other libraries or pointers were allowed to be used..
+
+# Execution
 
 ```cmd
 $ make
@@ -24,68 +30,66 @@ $ make demo
 $ make clean
 ```
 
-make: Eine ausführbare Datei wird im Ornder bin erstellt, die Datei kann wie in #Nutzung beschrieben ausgeführt werden.
-	Außerdem wird ein Demo-Programm erstellt, ebenfalls in bin/ gespeichert und ausgeführt. 
+make: an executable is created in the bin folder. 
 
-make demo: Erzeugt ein Demo-Programm, speichert dieses in bin/ und führt es aus.
+make demo: creates a demo-programm, saved in bin/ and runs it.
 
-make docu: Mithilfe von Doxypress wird eine HTML-Datei erstellt, zur Sichtung der Dokumentation im Code.
+make docu: doxypress html file is created
 
-make clean: Alle erstellten Dateien werden wieder gelöscht.
+make clean: All files created are wiped.
 
-make testscript: Ein Shell-Script läuft ab, welches die Korrektheit des Tries testet, der dem Pattern-Matcher zugrunde liegt mithilfe der in data bereitgestellten Testdaten
+make testscript:a shell script that proofs the correctness of the Trie.
 
-# Testdaten
+# Test data
 
-Im Ordner data stehen drei Wortlisten verschiedenen Umfangs zur Nutzung zur verfügung, 10, 100 und 10000 Einträge, entnommen aus dem DeReWo Korpus, eine Grundformenliste mit 250.000 Einträgen von 2011 (https://www1.ids-mannheim.de/kl/projekte/methoden/derewo.html).
-Des weiteren stehen im data-Ordner drei Artikel der Berliner Zeitung im txt-Format zur Verfügung, in denen gesucht werden kann. 
+In the data folder there are three word lists of different size available for use, 10, 100 and 10000 entries, taken from the DeReWo corpus, a basic form list with 250,000 entries from 2011 (https://www1.ids-mannheim.de/kl/projekte/methoden/derewo.html).
+Furthermore, three articles of the Berliner Zeitung are available in the data folder in txt format, which can be searched.
 
-# Nutzung
+# Usage
 
 
-$ -train TOKEN_TEXTFILE TRIE_TEXTFILE: In diesem Modus wird ein Pattern-Matcher erstellt und im txt-Format gespeichert. In diesem Modus 
-					 verlangt das Programm nach zwei Argumenten;
-					 TOKEN_TEXTFILE: ein Textdokument, dieses muss ISO-88591 enkodiert sein und ein Wort pro Zeile enthalten.
-					 TRIE_TEXTFILE: der Name des Textdokuments, in dem der erstellte Pattern-Matcher gespeichert wird.
+$ -train TOKEN_TEXTFILE TRIE_TEXTFILE: In this mode a pattern matcher is created and saved in txt format. In this mode 
+					 the program asks for two arguments;
+					 TOKEN_TEXTFILE: text file, ISO-88591 encoded, one word per line.
+					 TRIE_TEXTFILE: nam eof the file the pattern matcher should be saved in.
 
-$ -train -dot TOKEN_TEXTFILE TRIE_TEXTFILE DOT_File: Im Modus -train kann man optional eine Graphviz-dot-Repräsentation des Pattern-Matchers erstellen. 
-							DOT_File: ein Dokument mit .dot Endung wird gespeichert.
+$ -train -dot TOKEN_TEXTFILE TRIE_TEXTFILE DOT_File: In this mode -train an optional Graphviz-dot-representation of the Trie can be created. 
+							DOT_File: document with .dot type.
 
-$ -search SEARCH_TEXTFILE TRIE_TEXTFILE: In diesem Modus wird ein Textdokument nach den Wörtern aus dem im Modus -train erstellten Pattern-Matcher abgesucht. Der Modus 					 verlangt nach zwei Argumenten.
-					 SEARCH_TEXTFILE: ein Textdokument, ISO-8859-1 enkodiert. 
-					 TRIE_TEXTFILE: ein Textdokument, welches einen im Modus -train erstellten Pattern-Matcher beschreibt.
-					 Die Ausgabe der Funde wird im Terminal gemacht.
+$ -search SEARCH_TEXTFILE TRIE_TEXTFILE: A text document is searched for the words of the pattern matcher abgesucht.
+					 SEARCH_TEXTFILE: text file, ISO-88591 encoded 
+					 TRIE_TEXTFILE:text file that holds th ein the -train step created pattern matcher.
+					 The output is displayed in the terminal
 
-# Erstellen eines PDF aus dot
+# Create a .pdf out of .dot
 
-Im Modus -train -dot erstellt das Programm einen Pattern-Matcher, speichert diesen ab und erstellt zusätzlich eine dot-Repräsentation des zugrundeliegenden Tries.
-Mit folgendem Befehl kann aus der dot-Datei ein PDF erzeugt werden:
+In the mode -train -dot the programm creates a pattern matcher, saves it and in addition creates a dot representation of the Trie.
+The following command creates a pdf out of the dot:
 
 ```$ dot -Gcharset=latin1 -Tpdf DOT_FILENAME -o PDF_FILENAME``
+The option -Gcharset=latin1 is nessecary because of the ISO-8859-1 encoding.
+Be carfull the dot file can be very large.
 
-Die Option -Gcharset=latin1 wird benötigt, da das dot-Dokument ISO-8859-1 kodiert ist.
-Achtung! Dieser Vorgang kann einige Zeit in Anspruch nehmen bei großen dot-Dateien.
-
-# Beispiel Nutzung
+# Example
 
 ```cmd
 $ make-patternmatcher -train data/derewo100.txt output_data/patternmatcher100.txt
 ```
-Ein Pattern-Matcher wird erstellt und eine Statusmeldung wird ausgegeben : "Pattern-Matching machine was build and saved as /output_data/patternmatcher100.txt
+A pattern matcher was build and a status message is displayed : "Pattern-Matching machine was build and saved as /output_data/patternmatcher100.txt
 
 ```cmd
 $ make-patternmatcher -search data/Falafel.txt output_data/patternmatcher100.txt
 ```
 
-Ausgabe im Terminal:
+Output in the terminal:
 ```
 filename        Zeile   Tokens
 data/Falafel.txt       14      dazukommen
 ```
 
-# Testdaten erstellen
+# Create testdata
 
-Das Programm readtrie.cpp kann dazu verwendet werden, einen Pattern-Matcher zu erstellen und die im Trie gespeicherten Wörter in eine neue Datei zu schreiben.
+the programm readtrie.cpp can be used to create a pattern matcher and save the words of the Trie in a text file.
 
 
 ```cmd
@@ -95,19 +99,14 @@ $ cd ../bin
 $ ./readtrie ../data/derewo10.txt ../output_data/comp_list10.txt
 
 ```
-Die in /output_data erstellte Datei comp_list10.txt enthält alle Tokens, die im Trie gespeichert sind.
+The file comp_list10.txt in /output_data holds all the token that are saved in the Trie
 
 # Dokumentation
 
-Neben dieser README-Datei liegt im Ordner doc eine Doxypress-Dokumentation.
+Besides this README there is a Doxypress-Dokumentation in the doc folder.
 
-# Bemerkung
 
-Das Projekt entstand im Ramen eines Kurses an der Universität Potsdam als Prüfungsleistung.
-Im Projekt sollte nur mit im Kurs behandelten Elementen von C++ gearbeitet werden,
-dementsprechend durften keine weiteren Bibliotheken oder Pointer benutzt werden.
-
-# Autorin
+# Author
 Hannah Peuckmann
 peuckmann@uni-potsdam.de
 Universität Potsdam, Matrikelnummer 791996
